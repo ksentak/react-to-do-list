@@ -1,9 +1,10 @@
 import React from 'react';
+import TodoApp from './TodoApp';
 
 function App() {
   return (
     <div className='App'>
-      <h1>Hello!</h1>
+      <TodoApp />
     </div>
   );
 }
