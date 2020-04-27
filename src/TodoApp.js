@@ -8,6 +8,8 @@ import Paper from '@material-ui/core/Paper';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
+import uuid from 'uuid/v4';
+
 function TodoApp() {
   const initialTodos = [
     { id: 1, task: 'Take out trash', completed: false },
@@ -16,7 +18,11 @@ function TodoApp() {
   ];
   const [todos, setTodos] = useState(initialTodos);
   const addTodo = (newTodoText) => {
-    setTodos([...todos, { id: 4, task: newTodoText, complete: false }]);
+    setTodos([...todos, { id: uuid(), task: newTodoText, complete: false }]);
+  };
+  const removeTodo = (todoId) => {
+    const updatedTodos = todos.filter((todo) => todo.id !== todoId);
+    setTodos(updatedTodos);
   };
   return (
     <Paper
@@ -34,7 +40,7 @@ function TodoApp() {
       <Grid container justify='center' style={{ marginTop: '1rem' }}>
         <Grid item xs={11} md={8} lg={4}>
           <TodoForm addTodo={addTodo} />
-          <TodoList todos={todos} />
+          <TodoList todos={todos} removeTodo={removeTodo} />
         </Grid>
       </Grid>
     </Paper>
