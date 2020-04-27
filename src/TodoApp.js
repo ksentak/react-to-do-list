@@ -31,8 +31,12 @@ function TodoApp() {
       <AppBar color='primary' position='static' style={{ height: '64px' }}>
         <Toolbar color='inherit'>To-Do List w/ Hooks</Toolbar>
       </AppBar>
-      <TodoForm addTodo={addTodo} />
-      <TodoList todos={todos} />
+      <Grid container justify='center' style={{ marginTop: '1rem' }}>
+        <Grid item xs={11} md={8} lg={4}>
+          <TodoForm addTodo={addTodo} />
+          <TodoList todos={todos} />
+        </Grid>
+      </Grid>
     </Paper>
   );
 }
