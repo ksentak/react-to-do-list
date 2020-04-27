@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import TodoList from './TodoList';
+import TodoForm from './TodoForm';
 
 import AppBar from '@material-ui/core/AppBar';
 import Grid from '@material-ui/core/Grid';
@@ -27,6 +28,7 @@ function TodoApp() {
       <AppBar color='primary' position='static' style={{ height: '64px' }}>
         <Toolbar color='inherit'>To-Do List w/ Hooks</Toolbar>
       </AppBar>
+      <TodoForm />
       <TodoList todos={todos} />
     </Paper>
   );
