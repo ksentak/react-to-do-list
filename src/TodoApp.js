@@ -11,17 +11,28 @@ import Typography from '@material-ui/core/Typography';
 import uuid from 'uuid/v4';
 
 function TodoApp() {
+  // Initial Todos
   const initialTodos = [
     { id: 1, task: 'Take out trash', completed: false },
     { id: 2, task: 'Do dishes', completed: true },
     { id: 3, task: 'Laundry', completed: false },
   ];
+  // Set State
   const [todos, setTodos] = useState(initialTodos);
+  // Add Todos
   const addTodo = (newTodoText) => {
     setTodos([...todos, { id: uuid(), task: newTodoText, complete: false }]);
   };
+  // Remove Todos
   const removeTodo = (todoId) => {
     const updatedTodos = todos.filter((todo) => todo.id !== todoId);
+    setTodos(updatedTodos);
+  };
+  // Toggle Todos
+  const toggleTodo = (todoId) => {
+    const updatedTodos = todos.map((todo) =>
+      todo.id === todoId ? { ...todo, completed: !todo.completed } : todo
+    );
     setTodos(updatedTodos);
   };
   return (
@@ -40,7 +51,11 @@ function TodoApp() {
       <Grid container justify='center' style={{ marginTop: '1rem' }}>
         <Grid item xs={11} md={8} lg={4}>
           <TodoForm addTodo={addTodo} />
-          <TodoList todos={todos} removeTodo={removeTodo} />
+          <TodoList
+            todos={todos}
+            removeTodo={removeTodo}
+            toggleTodo={toggleTodo}
+          />
         </Grid>
       </Grid>
     </Paper>

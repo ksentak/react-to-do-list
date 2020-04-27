@@ -8,10 +8,14 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 
-function Todo({ task, completed, removeTodo, id }) {
+function Todo({ id, task, completed, removeTodo, toggleTodo }) {
   return (
     <ListItem>
-      <Checkbox tabIndex={-1} checked={completed} />
+      <Checkbox
+        tabIndex={-1}
+        checked={completed}
+        onClick={() => toggleTodo(id)}
+      />
       <ListItemText
         style={{ textDecoration: completed ? 'line-through' : 'none' }}
       >
