@@ -29,9 +29,16 @@ function TodoApp() {
     setTodos(updatedTodos);
   };
   // Toggle Todos
-  const toggleTodo = (todoId) => {
+  const toggleTodo = (todoId, newTask) => {
     const updatedTodos = todos.map((todo) =>
       todo.id === todoId ? { ...todo, completed: !todo.completed } : todo
+    );
+    setTodos(updatedTodos);
+  };
+  // Edit Todos
+  const editTodo = (todoId, newTask) => {
+    const updatedTodos = todos.map((todo) =>
+      todo.id === todoId ? { ...todo, task: newTask } : todo
     );
     setTodos(updatedTodos);
   };
@@ -55,6 +62,7 @@ function TodoApp() {
             todos={todos}
             removeTodo={removeTodo}
             toggleTodo={toggleTodo}
+            editTodo={editTodo}
           />
         </Grid>
       </Grid>
