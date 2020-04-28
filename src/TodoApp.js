@@ -1,40 +1,86 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TodoList from './TodoList';
 import TodoForm from './TodoForm';
+import { db } from './firebase';
 
 import AppBar from '@material-ui/core/AppBar';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 
 import uuid from 'uuid/v4';
 
 function TodoApp() {
   // Initial Todos
-  const initialTodos = [
-    { id: 1, task: 'Take out trash', completed: false },
-    { id: 2, task: 'Do dishes', completed: true },
-    { id: 3, task: 'Laundry', completed: false },
-  ];
+  const initialTodos = [{ id: '', task: '', completed: false }];
+
   // Set State
   const [todos, setTodos] = useState(initialTodos);
+
+  // Loads Firebase Todos
+  useEffect(() => {
+    const unsub = db.collection('items').onSnapshot((snapshot) => {
+      const todos = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setTodos(todos);
+    });
+    return () => {
+      console.log('cleanup');
+      unsub();
+    };
+  }, []);
+
+  // Add Todos
+  // const addTodo = (newTodoText) => {
+  //   setTodos([...todos, { id: uuid(), task: newTodoText, complete: false }]);
+  // };
+
   // Add Todos
   const addTodo = (newTodoText) => {
-    setTodos([...todos, { id: uuid(), task: newTodoText, complete: false }]);
+    db.collection('items')
+      .doc()
+      .set({
+        id: uuid(),
+        task: newTodoText,
+        completed: false,
+      })
+      .then(function () {
+        console.log('Document successfully written!');
+      })
+      .catch(function (error) {
+        console.error('Error writing document: ', error);
+      });
   };
+
   // Remove Todos
-  const removeTodo = (todoId) => {
-    const updatedTodos = todos.filter((todo) => todo.id !== todoId);
-    setTodos(updatedTodos);
+  // const removeTodo = (todoId) => {
+  //   const updatedTodos = todos.filter((todo) => todo.id !== todoId);
+  //   setTodos(updatedTodos);
+  // };
+
+  const removeTodo = (id, todoId) => {
+    db.collection('items')
+      .where(id, '==', todoId)
+      .doc()
+      .delete()
+      .then(function () {
+        console.log('Document successfully deleted!');
+      })
+      .catch(function (error) {
+        console.error('Error removing document: ', error);
+      });
   };
+
   // Toggle Todos
-  const toggleTodo = (todoId, newTask) => {
+  const toggleTodo = (todoId) => {
     const updatedTodos = todos.map((todo) =>
       todo.id === todoId ? { ...todo, completed: !todo.completed } : todo
     );
     setTodos(updatedTodos);
   };
+
   // Edit Todos
   const editTodo = (todoId, newTask) => {
     const updatedTodos = todos.map((todo) =>
@@ -42,6 +88,7 @@ function TodoApp() {
     );
     setTodos(updatedTodos);
   };
+
   return (
     <Paper
       style={{
